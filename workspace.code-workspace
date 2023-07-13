@@ -1,1 +1,6 @@
-{"folders":[{"path":"SAP-CI-CD"}],"settings":{}}
+{"folders":[
+        {
+            "name": "app",
+            "path": "app"
+        }
+    ],"settings":{}}

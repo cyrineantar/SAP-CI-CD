@@ -1,7 +1,7 @@
 {
   "name": "app",
   "version": "0.0.1",
-  "repository": "<Add your repository here>",
+  "repository": "https://github.com/cyrineantar/SAP-CI-CD.git",
   "license": "UNLICENSED",
   "description": "Business Application",
   "engines": {
