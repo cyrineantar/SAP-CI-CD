@@ -11,7 +11,6 @@
     "@sap-cloud-sdk/http-client": "^2.5",
     "@sap/audit-logging": "^5",
     "@sap/cds": "^6.8",
-    "@sap/cds-mtx": "^2.6.4",
     "@sap/cds-mtxs": "^1.9.1",
     "@sap/xsenv": "^3",
     "@sap/xssec": "^3",
