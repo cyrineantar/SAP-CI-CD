@@ -42,7 +42,7 @@ modules:
       - name: srv-api
         properties:
           srv-url: ${default-url}
-      - name: mtx-apii
+      - name: mtx-apiI
         properties:
           mtx-url: ${default-url}
 
@@ -72,16 +72,16 @@ modules:
           url: ~{srv-url}
           timeout: 600000
           forwardAuthToken: true
-      - name: mtx-apii
+      - name: mtx-apiI
         group: destinations
         properties:
           name: mtx
           url: ~{mtx-url}
           timeout: 600000
-      - name: mtx-apii
+      - name: mtx-apiI
         group: destinations
         properties:
-          name: mtx-apii # must be used in xs-app.json as well
+          name: mtx-apiI # must be used in xs-app.json as well
           url: ~{mtx-url}
     provides:
       - name: app-api
@@ -103,7 +103,7 @@ modules:
       memory: 256M
       disk-quota: 512M
     provides:
-      - name: mtx-apii
+      - name: mtx-apiI
         properties:
           mtx-url: ${default-url}
 
@@ -157,7 +157,7 @@ resources:
     # ------------------------------------------------------------
     type: org.cloudfoundry.managed-service
     requires:
-      - name: mtx-apii
+      - name: mtx-apiI
     parameters:
       service: saas-registry
       service-plan: application
@@ -169,8 +169,8 @@ resources:
         description: 'Business Application'
         category: 'SaaS Multitenant Apps'
         appUrls:
-          onSubscription: ~{mtx-apii/mtx-url}/-/cds/saas-provisioning/tenant/{tenantId}
-          getDependencies: ~{mtx-apii/mtx-url}/-/cds/saas-provisioning/dependencies
+          onSubscription: ~{mtx-apiI/mtx-url}/-/cds/saas-provisioning/tenant/{tenantId}
+          getDependencies: ~{mtx-apiI/mtx-url}/-/cds/saas-provisioning/dependencies
           onSubscriptionAsync: false
           onUnSubscriptionAsync: false
           callbackTimeoutMillis: 300000
