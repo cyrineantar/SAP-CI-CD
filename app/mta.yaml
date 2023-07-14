@@ -14,10 +14,9 @@ build-parameters:
 
 modules:
 
-
   # --------------------- SERVER MODULE ------------------------
   - name: app-srv
-  # ------------------------------------------------------------
+    # ------------------------------------------------------------
     type: nodejs
     path: gen/srv
     build-parameters:
@@ -47,12 +46,9 @@ modules:
         properties:
           mtx-url: ${default-url}
 
-
-
-
   # ------------------ APP ROUTER MODULE -----------------------
   - name: app-app
-  # ------------------------------------------------------------
+    # ------------------------------------------------------------
     type: approuter.nodejs
     path: app
     build-parameters:
@@ -82,26 +78,51 @@ modules:
           name: mtx
           url: ~{mtx-url}
           timeout: 600000
+      - name: mtx-api
+        group: destinations
+        properties:
+          name: mtx-api # must be used in xs-app.json as well
+          url: ~{mtx-url}
     provides:
       - name: app-api
         properties:
           app-protocol: ${protocol}
           app-uri: ${default-uri}
 
+  - name: app-mtx
+    type: nodejs
+    path: gen/mtx/sidecar
+    requires:
+      - name: app-api
+        properties:
+          SUBSCRIPTION_URL: ~{app-protocol}://\${tenant_subdomain}-~{app-uri}
+      - name: app-sm
+    build-parameters:
+      builder: npm-ci
+    parameters:
+      memory: 256M
+      disk-quota: 512M
+    provides:
+      - name: mtx-api
+        properties:
+          mtx-url: ${default-url}
 
 resources:
   # ----------------------- UAA SERVICE ------------------------
   - name: app-uaa
-  # ------------------------------------------------------------
+    # ------------------------------------------------------------
     type: org.cloudfoundry.managed-service
     parameters:
       service: xsuaa
       service-plan: application
       path: ./xs-security.json
+      config:
+        xsappname: app-${org}-${space}
+        tenant-mode: shared
 
   # -------------------- DESTINATION SERVICE -------------------
   - name: app-dest
-  # ------------------------------------------------------------
+    # ------------------------------------------------------------
     type: org.cloudfoundry.managed-service
     parameters:
       service: destination
@@ -131,14 +152,9 @@ resources:
                 URL.queries.api_key: <SetValueInCockpit>
                 HTML5.DynamicDestination: true
 
-
-
-
-
-
   # --------------------- REGISTRY SERVICE ---------------------
   - name: app-registry
-  # ------------------------------------------------------------
+    # ------------------------------------------------------------
     type: org.cloudfoundry.managed-service
     requires:
       - name: mtx-api
@@ -158,19 +174,18 @@ resources:
           onSubscriptionAsync: false
           onUnSubscriptionAsync: false
           callbackTimeoutMillis: 300000
+          onUpdateDependenciesAsync: true
 
   # ------------------- SERVICE MANAGER SERVICE ----------------
   - name: app-sm
-  # ------------------------------------------------------------
+    # ------------------------------------------------------------
     type: org.cloudfoundry.managed-service
     requires:
-     - name: app-uaa
+      - name: app-uaa
     parameters:
-       service: service-manager
-       service-plan: container
-       polling_timeout_seconds: 240
-       config:
-         acquireTimeoutMillis: max
-         polling_timeout_seconds: 480
-
-
+      service: service-manager
+      service-plan: container
+      polling_timeout_seconds: 240
+      config:
+        acquireTimeoutMillis: max
+        polling_timeout_seconds: 480
