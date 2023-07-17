@@ -32,6 +32,8 @@ stages:
 steps:
   mtaBuild:
     buildTarget: 'CF'
+    mtaJarLocation: '/opt/sap/mta/lib/mta.jar'
+    dockerImage: 'ppiper/mta-archive-builder'
   artifactPrepareVersion:
     versioningType: "cloud_noTag"
   npmExecuteLint:
