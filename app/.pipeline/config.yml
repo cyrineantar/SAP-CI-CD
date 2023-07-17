@@ -30,12 +30,21 @@ stages:
     deployType: "standard"
     tmsUpload: false
 steps:
+  mtaBuild:
+    buildTarget: 'CF'
   artifactPrepareVersion:
     versioningType: "cloud_noTag"
   npmExecuteLint:
     failOnError: true
   cloudFoundryDeploy:
     mtaDeployParameters: "-f --version-rule ALL"
+    deployTool: 'mtaDeployPlugin'
+    deployType: 'standard'
+    cloudFoundry:
+      org: '945a9829trial_provider-dev-scg7ql54'
+      space: 'Dev'
+      credentialsId: 'deploy-to-cf'
   tmsUpload:
     nodeName: "qa"
     credentialsId: "tms-sk"
+    
